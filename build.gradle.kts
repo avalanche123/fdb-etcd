@@ -22,8 +22,8 @@ repositories {
 }
 
 val vertxVersion = "4.4.5"
-val fdbJavaVersion = "6.2.19"
-val fbdRecordLayerVersion = "2.10.164.0"
+val fdbJavaVersion = "7.1.35"
+val fbdRecordLayerVersion = "3.3.410.0"
 val junitJupiterVersion = "5.9.1"
 val testContainersVersion = "1.19.0"
 
@@ -43,13 +43,16 @@ dependencies {
   implementation("io.vertx:vertx-grpc")
   implementation("org.foundationdb:fdb-java:$fdbJavaVersion")
   implementation("org.foundationdb:fdb-record-layer-core-pb3:$fbdRecordLayerVersion")
+  implementation("org.apache.commons:commons-lang3:3.13.0")
   implementation("io.grpc:grpc-alts:1.57.2")
   implementation("javax.annotation:javax.annotation-api:1.3.2")
+  implementation("org.slf4j:slf4j-api:2.0.9")
 
   testImplementation("io.vertx:vertx-junit5")
   testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
   testImplementation("org.testcontainers:testcontainers:$testContainersVersion")
   testImplementation("io.etcd:jetcd-core:0.7.6")
+  testImplementation("ch.qos.logback:logback-classic:1.4.11")
 }
 
 java {
@@ -68,9 +71,8 @@ tasks.withType<ShadowJar> {
 tasks.withType<Test> {
   useJUnitPlatform()
   testLogging {
+    outputs.upToDateWhen {false}
     events = setOf(PASSED, SKIPPED, FAILED)
-  }
-  testLogging {
     showStandardStreams = true
     exceptionFormat = FULL
   }
